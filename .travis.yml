@@ -18,10 +18,15 @@ before_install:
   - sudo apt-get update -qq
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.9.4
   - sudo apt-get install -y -qq libgif-dev libpng-dev libjpeg8-dev libpango1.0-dev libcairo2-dev
-deploy:
-  provider: pages
-  skip-cleanup: true
-  github-token: 2ab78f0ab098c43c9f44585054c6ab4fd1ae8cac # Set in the settings page of your repository, as a secure variable
-  keep-history: true
-  on:
-    branch: master
+jobs:
+  include:
+    - script: echo "Running unit tests (1)"
+    - script: echo "Running unit tests (2)"
+    - stage: GitHub Release
+      script: skip
+      deploy:
+        provider: releases
+        api_key: "2ab78f0ab098c43c9f44585054c6ab4fd1ae8cac"
+        skip_cleanup: true
+        on:
+          tags: true
